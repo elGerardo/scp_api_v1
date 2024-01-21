@@ -1,6 +1,7 @@
 <?php
 
-use Illuminate\Http\Request;
+use App\Http\Controllers\SCPController;
+use App\Http\Middleware\VerifyCsrfToken;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -14,6 +15,17 @@ use Illuminate\Support\Facades\Route;
 |
 */
 
-Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
-    return $request->user();
+Route::prefix('v1')->group(function () {
+    Route::prefix('/scp')->group(function () {
+        Route::get('', [SCPController::class, 'index'])->name('scp.index');
+        Route::post('', [SCPController::class, 'store'])->name('scp.store');
+        Route::get('/{scp_id}', [SCPController::class, 'find'])->name('scp.find');
+        Route::put('/{scp_id}', [SCPController::class, 'update'])->name('scp.update');
+    });
+    //Route::prefix('/category')->group(function () {
+
+    //});
+    //Route::prefix('/interview')->group(function () {
+
+    //});
 });
