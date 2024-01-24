@@ -13,12 +13,12 @@ class SCPController extends Controller
     public function index(Request $request)
     {
         $page = $request->query('page', 25);
-        return SCPResource::collection(SCP::orderBy('id')->cursorPaginate($page));
+        return SCPResource::collection(SCP::orderBy('id')->with(['category', 'interviews'])->paginate($page));
     }
 
     public function find(string $scp_id)
     {
-        return new SCPResource(SCP::findOrFail($scp_id));
+        return new SCPResource(SCP::where('id', $scp_id)->with(['category', 'interviews'])->firstOrFail());
     }
 
     public function store(StoreSCPRequest $request)

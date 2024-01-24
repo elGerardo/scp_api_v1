@@ -15,6 +15,7 @@ return new class extends Migration
             $table->id();
             $table->foreignId('scp_id')->references('id')->on('scp');
             $table->text('interview');
+            $table->dateTime('ocurred_on')->nullable();
         });
     }
 

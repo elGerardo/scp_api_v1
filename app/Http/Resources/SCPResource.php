@@ -14,14 +14,15 @@ class SCPResource extends JsonResource
     public function toArray($request): array
     {
         return [
-            "id" => $this->id,
-            "code" => $this->code,
-            "name" => $this->name,
-            "description" => $this->description,
-            "weight" => $this->weight,
-            "height" => $this->height,
-            "picture" => $this->picture,
-            "category_id" => $this->category_id
+            'id' => $this->id,
+            'code' => $this->code,
+            'name' => $this->name,
+            'description' => $this->description,
+            'weight' => $this->weight,
+            'height' => $this->height,
+            'picture' => $this->picture,
+            'category' => $this->category,
+            'interviews' => $this->interviews
         ];
     }
 }
