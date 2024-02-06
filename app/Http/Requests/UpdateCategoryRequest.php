@@ -24,7 +24,7 @@ class UpdateCategoryRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name' => 'sometimes|unique|max:255',
+            'name' => 'sometimes|unique:category,name|max:255',
             'description' => 'sometimes|max:255',
             'picture' => 'sometimes|url'
         ];

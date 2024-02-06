@@ -33,7 +33,7 @@ Route::prefix('v1')->group(function () {
         Route::get('', [CategoryController::class, 'index'])->name('category.index');
         Route::get('/{name}', [CategoryController::class, 'find'])->name('category.find');
         Route::group(['middleware' => 'auth:sanctum'], function() {
-            Route::post('', [CategoryController::class, 'store'])->name('category.store');
+            Route::post('/', [CategoryController::class, 'store'])->name('category.store');
             Route::put('/{name}', [CategoryController::class, 'update'])->name('category.update');
         });
     });
@@ -42,7 +42,7 @@ Route::prefix('v1')->group(function () {
         Route::get('', [InterviewsController::class, 'index'])->name('interviews.index');
         Route::get('/{scp_id}', [InterviewsController::class, 'getBySCP'])->name('interviews.getBySCP');
         Route::group(['middleware' => 'auth:sanctum'], function() {
-            Route::post('', [InterviewsController::class, 'store'])->name('interviews.store');
+            Route::post('/', [InterviewsController::class, 'store'])->name('interviews.store');
             Route::put('/{id}', [InterviewsController::class, 'update'])->name('interviews.update');
         });
     });

@@ -3,7 +3,8 @@
 namespace App\Exceptions;
 
 use Illuminate\Foundation\Exceptions\Handler as ExceptionHandler;
-use Throwable;
+use Symfony\Component\HttpKernel\Exception\HttpException;
+use Symfony\Component\Routing\Exception\RouteNotFoundException;
 
 class Handler extends ExceptionHandler
 {
@@ -23,8 +24,27 @@ class Handler extends ExceptionHandler
      */
     public function register(): void
     {
-        $this->reportable(function (Throwable $e) {
-            //
+        $this->renderable(function (HttpException $e) {
+            if ($e->getStatusCode() == 500) {
+                return response()->json([
+                    'message' => 'Server Error'
+                ], 404);
+            }
+            if ($e->getStatusCode() == 404) {
+                $message = 'Row not found';
+                if(str_contains($e->getMessage(), 'The route')) $message = 'Route not found';
+                return response()->json([
+                    'message' => $message
+                ], 404);
+            }
+        });
+
+        $this->renderable(function (RouteNotFoundException $e, $request) {
+            $message = 'Route Not Found';
+            if(str_contains($e->getMessage(), 'Route [login] not defined')) $message = 'Token not found';
+            return response()->json([
+                'message' => $message
+            ], 404);
         });
     }
 }
