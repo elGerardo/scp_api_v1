@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
 
@@ -31,5 +32,10 @@ class SCP extends Model
     public function interviews(): HasMany
     {
         return $this->hasMany(Interviews::class, 'scp_id', 'id');
+    }
+
+    public function enemies(): BelongsToMany
+    {
+        return $this->belongsToMany(SCP::class, 'enemies', 'scp_id', 'scp_enemy_id');
     }
 }
