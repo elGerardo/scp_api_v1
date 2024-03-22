@@ -13,8 +13,10 @@ class SCPResource extends JsonResource
      */
     public function toArray($request): array
     {
-        return [
+        $data = [
             'id' => $this->id,
+            'label' => $this->label,
+            'value' => $this->value,
             'code' => $this->code,
             'name' => $this->name,
             'description' => $this->description,
@@ -24,5 +26,11 @@ class SCPResource extends JsonResource
             'category' => $this->category,
             'interviews' => $this->interviews
         ];
+
+        $filteredData = array_filter($data, function($value) {
+            return $value != null;
+        });
+
+        return $filteredData;
     }
 }

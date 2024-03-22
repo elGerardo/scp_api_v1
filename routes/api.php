@@ -30,6 +30,10 @@ Route::prefix('v1')->group(function () {
         });
     });
 
+    Route::group(['middleware' => 'auth:sanctum'], function () {
+        Route::get('/scp_ids', [SCPController::class, 'getWithIds'])->name('scp.getWithIds');
+    });
+
     Route::prefix('/category')->group(function () {
         Route::get('', [CategoryController::class, 'index'])->name('category.index');
         Route::get('/{name}', [CategoryController::class, 'find'])->name('category.find');
@@ -38,6 +42,11 @@ Route::prefix('v1')->group(function () {
             Route::put('/{name}', [CategoryController::class, 'update'])->name('category.update');
         });
     });
+
+    Route::group(['middleware' => 'auth:sanctum'], function () {
+        Route::get('/category_ids', [CategoryController::class, 'getWithIds'])->name('category.getWithIds');
+    });
+    
 
     Route::prefix('/interviews')->group(function () {
         Route::get('', [InterviewsController::class, 'index'])->name('interviews.index');
@@ -50,7 +59,7 @@ Route::prefix('v1')->group(function () {
 
     Route::prefix('/enemies')->group(function () {
         Route::get('{scp_id}', [SCPEnemiesController::class, 'find'])->name('scp_enemies.find');
-        Route::group(['middleware' => 'auth:sanctum'], function(){
+        Route::group(['middleware' => 'auth:sanctum'], function () {
             Route::post('/{scp_id}/enemy/{scp_enemy_id}', [SCPEnemiesController::class, 'store'])->name('scp_enemies.store');
             Route::delete('/{scp_id}/enemy/{scp_enemy_id}', [SCPEnemiesController::class, 'destroy'])->name('scp_enemies.destroy');
         });

@@ -23,8 +23,11 @@ class SCPEnemiesController extends Controller
             return response()->json([ "message" => "SCP's already related" ], 422);
         }
 
-        $scpEnemy = SCP::findOrFail($scp_enemy_id); 
+        $scpEnemy = SCP::where('id', $scp_enemy_id)->with(['enemies'])->firstOrFail();
+        
         $scp->enemies()->attach($scpEnemy->id);
+        $scpEnemy->enemies()->attach($scp->id);
+        
         return response()->json([], 204);
     }
 
@@ -34,8 +37,11 @@ class SCPEnemiesController extends Controller
             $query->where('scp_enemy_id', $scp_enemy_id);
         }])->firstOrFail();
 
-        $scpEnemy = SCP::findOrFail($scp_enemy_id); 
+        $scpEnemy = SCP::where('id', $scp_enemy_id)->with(['enemies'])->firstOrFail();
+
         $scp->enemies()->detach($scpEnemy->id);
+        $scpEnemy->enemies()->detach($scp->id);
+
         return response()->json([], 204);
     }
 }

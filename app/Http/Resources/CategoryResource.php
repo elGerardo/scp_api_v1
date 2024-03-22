@@ -14,10 +14,19 @@ class CategoryResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
+            'id' => $this->id,
+            'value' => $this->value,
+            'label' => $this->label,
             'name' => $this->name,
             'picture' => $this->picture,
             'description' => $this->description,
         ];
+
+        $filteredData = array_filter($data, function($value) {
+            return $value != null;
+        });
+
+        return $filteredData;
     }
 }

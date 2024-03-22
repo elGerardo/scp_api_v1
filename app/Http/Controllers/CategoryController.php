@@ -11,12 +11,12 @@ class CategoryController extends Controller
 {
     public function index()
     {
-        return CategoryResource::collection(Category::all());
+        return CategoryResource::collection(Category::all(['name', 'picture', 'description']));
     }
 
     public function find(string $name)
     {
-        return new CategoryResource(Category::where('name', $name)->firstOrFail());
+        return new CategoryResource(Category::select(['name', 'picture', 'description'])->where('name', $name)->firstOrFail());
     }
 
     public function store(StoreCategoryRequest $request)
@@ -31,5 +31,10 @@ class CategoryController extends Controller
         $category->update($payload);
         $category->save();
         return new CategoryResource($category);
+    }
+
+    public function getWithIds()
+    {
+        return CategoryResource::collection(Category::all(['id as value', 'name as label']));
     }
 }
