@@ -14,7 +14,7 @@ class SCPResource extends JsonResource
     public function toArray($request): array
     {
         $data = [
-            'id' => $this->id,
+            'scp' => $this->scp,
             'label' => $this->label,
             'value' => $this->value,
             'code' => $this->code,
@@ -24,7 +24,8 @@ class SCPResource extends JsonResource
             'height' => $this->height,
             'picture' => $this->picture,
             'category' => $this->category,
-            'interviews' => $this->interviews
+            'interviews' => $this->interviews,
+            'enemies' => $this->enemies
         ];
 
         $filteredData = array_filter($data, function($value) {

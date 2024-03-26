@@ -18,18 +18,4 @@ class InterviewsController extends Controller
     {
         return InterviewsResource::collection(Interviews::where('scp_id', $scp_id)->get());
     }
-
-    public function store(StoreInterviewRequest $request)
-    {
-        return new InterviewsResource(Interviews::create($request->validated()));
-    }
-
-    public function update(UpdateInterviewRequest $request, int $id)
-    {
-        $interview = Interviews::findOrFail($id);
-        $payload = $request->validated();
-        $interview->update($payload);
-        $interview->save();
-        return new InterviewsResource($interview);
-    }
 }

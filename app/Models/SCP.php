@@ -23,6 +23,7 @@ class SCP extends Model
         "category_id"
     ];
     public $timestamps = false;
+    protected $hidden = ["pivot"];
 
     public function category(): HasOne
     {

@@ -14,41 +14,30 @@ class SCPController extends Controller
     public function index(Request $request)
     {
         $page = $request->query('page', 25);
-        return SCPResource::collection(SCP::select(['code', 'name', 'description', 'picture', 'category_id'])->orderBy('id')->with([
+        return SCPResource::collection(SCP::select(['id', 'id as scp', 'code', 'name', 'description', 'picture', 'category_id'])->orderBy('id')->with([
             'category',
             'enemies' => function ($query) {
-                $query->limit(2);
-            }, 'interviews' => function ($query) {
-                $query->limit(2);
+                $query->select(['id as scp', 'code', 'name', 'picture'])->limit(2);
+            },
+            'interviews' => function ($query) {
+                $query->select(['scp_id', 'scp_id as scp', DB::raw('CONCAT(SUBSTRING(`interview`, 1, 150), "...") as interview'), 'ocurred_on'])
+                    ->limit(2);
             }
         ])->paginate($page));
     }
 
     public function find(string $scp_id)
     {
-        return new SCPResource(SCP::select(['code', 'name', 'description', 'picture', 'category_id'])->where('id', $scp_id)->with(['category', 'interviews'])->firstOrFail());
-    }
-
-    public function store(StoreSCPRequest $request)
-    {
-        $payload = $request->validated();
-        $code = $payload['id'] < 100 ? 'SCP-0' . $payload['id'] : 'SCP-' . $payload['id'];
-        $payload['code'] = $code;
-        $scp = SCP::create($payload);
-        return new SCPResource($scp);
-    }
-
-    public function update(UpdateSCPRequest $request, string $id)
-    {
-        $scp = SCP::findOrFail($id);
-        $payload = $request->validated();
-        $scp->update($payload);
-        $scp->save();
-        return new SCPResource($scp);
-    }
-
-    public function getWithIds()
-    {
-        return SCPResource::collection(SCP::all(['id as value', DB::raw("CONCAT(id, ' - ', name) AS label")]));
+        return new SCPResource(SCP::select(['id', 'id as scp', 'code', 'name', 'description', 'picture', 'category_id'])
+            ->where('id', $scp_id)
+            ->with([
+                'category',
+                'enemies' => function ($query) {
+                    $query->select(['id as scp', 'code', 'name', 'picture', 'description']);
+                },
+                'interviews' => function ($query) {
+                    $query->select(['scp_id', 'scp_id as scp', 'interview', 'ocurred_on']);
+                },
+            ])->firstOrFail());
     }
 }

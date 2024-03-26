@@ -10,11 +10,13 @@ class Interviews extends Model
     use HasFactory;
     protected $table = "interviews";
     protected $hidden = [
-        "id"
+        "id",
+        "scp_id"
     ];
     protected $fillable = [
         "scp_id",
-        "interview"
+        "interview",
+        "ocurred_on"
     ];
     public $timestamps = false;
 }

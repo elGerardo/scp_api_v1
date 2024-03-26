@@ -18,23 +18,4 @@ class CategoryController extends Controller
     {
         return new CategoryResource(Category::select(['name', 'picture', 'description'])->where('name', $name)->firstOrFail());
     }
-
-    public function store(StoreCategoryRequest $request)
-    {
-        return new CategoryResource(Category::create($request->validated()));
-    }
-
-    public function update(UpdateCategoryRequest $request, string $name)
-    {
-        $category = Category::where('name', $name)->firstOrFail();
-        $payload = $request->validated();
-        $category->update($payload);
-        $category->save();
-        return new CategoryResource($category);
-    }
-
-    public function getWithIds()
-    {
-        return CategoryResource::collection(Category::all(['id as value', 'name as label']));
-    }
 }
