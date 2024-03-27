@@ -15,12 +15,10 @@ class SCPEnemiesResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->id,
+            'scp' => $this->scp,
             'code' => $this->code,
             'name' => $this->name,
             'description' => $this->description,
-            'weight' => $this->weight,
-            'height' => $this->height,
             'picture' => $this->picture,
             'enemies' => $this->enemies,
         ];
