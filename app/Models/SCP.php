@@ -7,6 +7,10 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsToMany;
 use Illuminate\Database\Eloquent\Relations\HasMany;
 use Illuminate\Database\Eloquent\Relations\HasOne;
+use Illuminate\Database\Eloquent\Builder;
+use App\Filters\SCP\BetweenSCPFilter;
+use App\Filters\Shared\OrderByFilter;
+use App\Filters\Shared\SearchByFilter;
 
 class SCP extends Model
 {
@@ -24,6 +28,31 @@ class SCP extends Model
     ];
     public $timestamps = false;
     protected $hidden = ["pivot"];
+    public $filters = [];
+
+    public function __construct()
+    {
+        $this->filters = [
+            'searchBy' => new SearchByFilter(),
+            'between' => new BetweenSCPFilter(),
+            'orderBy' => new OrderByFilter(),
+        ];
+    }
+
+    public function scopeFilter(Builder $query, $filters): Builder
+    {
+        foreach($filters as $key => $value){
+            if(array_key_exists($key, $this->filters)){
+                $filterClass = $this->filters[$key];
+                
+                $filter = new $filterClass;
+
+                $query = $filter->handle($query, $value);
+            }
+        }
+
+        return $query;
+    }
 
     public function category(): HasOne
     {

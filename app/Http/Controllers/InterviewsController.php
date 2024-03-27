@@ -2,20 +2,25 @@
 
 namespace App\Http\Controllers;
 
-use App\Http\Requests\StoreInterviewRequest;
-use App\Http\Requests\UpdateInterviewRequest;
 use App\Http\Resources\InterviewsResource;
 use App\Models\Interviews;
+use Illuminate\Http\Request;
 
 class InterviewsController extends Controller
 {
-    public function index()
+    public function index(Request $request)
     {
-        return InterviewsResource::collection(Interviews::all());
+        $page = $request->query('page', 0);
+        $limit = $request->query('limit', 15);
+        
+        return InterviewsResource::collection(Interviews::filter($request->query())
+        ->limit($limit)
+        ->offset($page)
+        ->get());
     }
 
-    public function getBySCP(int $scp_id)
+    public function getBySCP(Request $request, int $scp_id)
     {
-        return InterviewsResource::collection(Interviews::where('scp_id', $scp_id)->get());
+        return InterviewsResource::collection(Interviews::where('scp_id', $scp_id)->filter($request->query())->get());
     }
 }
