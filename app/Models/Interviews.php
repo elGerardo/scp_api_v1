@@ -38,10 +38,7 @@ class Interviews extends Model
         foreach($filters as $key => $value){
             if(array_key_exists($key, $this->filters)){
                 $filterClass = $this->filters[$key];
-                
-                $filter = new $filterClass;
-
-                $query = $filter->handle($query, $value);
+                $query = $filterClass->handle($query, $value);
             }
         }
 
