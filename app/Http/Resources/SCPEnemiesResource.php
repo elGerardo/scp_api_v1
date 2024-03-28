@@ -14,7 +14,7 @@ class SCPEnemiesResource extends JsonResource
      */
     public function toArray(Request $request): array
     {
-        return [
+        $data = [
             'scp' => $this->scp,
             'code' => $this->code,
             'name' => $this->name,
@@ -22,5 +22,11 @@ class SCPEnemiesResource extends JsonResource
             'picture' => $this->picture,
             'enemies' => $this->enemies,
         ];
+
+        $filteredData = array_filter($data, function($value) {
+            return $value != null;
+        });
+
+        return $filteredData;
     }
 }

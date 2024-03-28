@@ -1,17 +1,18 @@
-<?php 
+<?php
 
 namespace App\Filters\Shared;
 
-use Exception;
 use Illuminate\Database\Eloquent\Builder;
 
-class SearchByFilter {
-    public function handle(Builder $query, $value){
-        try{
+class SearchByFilter
+{
+    public function handle(Builder $query, $value)
+    {
+        if (json_validate($value)) {
             $filter = json_decode($value, true);
-            return $query->where($filter['field'], 'LIKE', '%'.$filter['value'].'%'); 
-        }catch(Exception $_){
-            return $query;
+            if(!array_key_exists('field', $filter) or !array_key_exists('value', $filter)) return $query;
+            return $query->where($filter['field'] == 'scp' ? 'id' : $filter['field'], 'LIKE', '%' . $filter['value'] . '%');
         }
+        return $query;
     }
 }

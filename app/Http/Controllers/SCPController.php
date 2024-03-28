@@ -15,12 +15,14 @@ class SCPController extends Controller
         $limit = $request->query('limit', 15);
 
         return SCPResource::collection(SCP::select(['id', 'id as scp', 'code', 'name', 'description', 'picture', 'category_id'])->with([
-            'category',
+            'category' => function($query) {
+                $query->select(['id', 'name', 'picture']);
+            },
             'enemies' => function ($query) {
                 $query->select(['id as scp', 'code', 'name', 'picture'])->limit(2);
             },
             'interviews' => function ($query) {
-                $query->select(['scp_id', 'scp_id as scp', DB::raw('CONCAT(SUBSTRING(`interview`, 1, 75), "...") as interview'), 'ocurred_on'])
+                $query->select(['scp_id', DB::raw('CONCAT(SUBSTRING(`interview`, 1, 75), "...") as interview'), 'ocurred_on'])
                     ->limit(2);
             }
         ])

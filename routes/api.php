@@ -62,6 +62,7 @@ Route::prefix('v1')->group(function () {
     });
 
     Route::prefix('/enemies')->group(function () {
+        Route::get('/', [SCPEnemiesController::class, 'index'])->name('scp_enemies.index');
         Route::get('{scp_id}', [SCPEnemiesController::class, 'find'])->name('scp_enemies.find');
         Route::group(['middleware' => 'auth:sanctum'], function () {
             Route::post('/{scp_id}/enemy/{scp_enemy_id}', [AdminSCPEnemiesController::class, 'store'])->name('scp_enemies.store');
